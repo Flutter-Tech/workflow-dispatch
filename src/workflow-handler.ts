@@ -96,29 +96,6 @@ export class WorkflowHandler {
     }
   }
 
-
-  async getWorkflowRunArtifacts(): Promise<WorkflowRunResult> {
-    try {
-      const runId = await this.getWorkflowRunId()
-      const response = await this.octokit.rest.actions.getWorkflowRunArtifacts({
-        owner: this.owner,
-        repo: this.repo,
-        run_id: runId
-      })
-      debug('Workflow Run artifacts', response)
-
-      return {
-        url: response.data.html_url,
-        status: ofStatus(response.data.status),
-        conclusion: ofConclusion(response.data.conclusion)
-      }
-
-    } catch (error) {
-      debug('Workflow Run artifacts error', error)
-      throw error
-    }
-  }
-
   private async getWorkflowRunId(): Promise<number> {
     if (this.workflowRunId) {
       return this.workflowRunId
@@ -130,7 +107,6 @@ export class WorkflowHandler {
         owner: this.owner,
         repo: this.repo,
         workflow_id: workflowId,
-        event: 'workflow_dispatch'
       })
       debug('List Workflow Runs', response)
 

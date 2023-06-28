@@ -9736,28 +9736,6 @@ class WorkflowHandler {
             }
         });
     }
-    getWorkflowRunArtifacts() {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const runId = yield this.getWorkflowRunId();
-                const response = yield this.octokit.rest.actions.getWorkflowRunArtifacts({
-                    owner: this.owner,
-                    repo: this.repo,
-                    run_id: runId
-                });
-                debug_1.debug('Workflow Run artifacts', response);
-                return {
-                    url: response.data.html_url,
-                    status: ofStatus(response.data.status),
-                    conclusion: ofConclusion(response.data.conclusion)
-                };
-            }
-            catch (error) {
-                debug_1.debug('Workflow Run artifacts error', error);
-                throw error;
-            }
-        });
-    }
     getWorkflowRunId() {
         return __awaiter(this, void 0, void 0, function* () {
             if (this.workflowRunId) {
@@ -9770,7 +9748,6 @@ class WorkflowHandler {
                     owner: this.owner,
                     repo: this.repo,
                     workflow_id: workflowId,
-                    event: 'workflow_dispatch'
                 });
                 debug_1.debug('List Workflow Runs', response);
                 const runs = response.data.workflow_runs
